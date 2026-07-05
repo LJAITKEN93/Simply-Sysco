@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Simply Sysco - Digital Warehouse Experience</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--sb:#0088D8;--sbd:#0069A8;--sbl:#E6F4FC;--sg:#4BB92C;--sgd:#3A9422;--sgl:#E8F7E4;--sn:#0A1628;--snl:#111D2E;--snll:#1A2A3E;--ssl:#2D3E50;--sgy:#6B7B8D;--sgyl:#F1F4F8;--sgb:#E2E8F0;--so:#F59E0B;--sr:#EF4444;--sp:#8B5CF6;--st:#14B8A6}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--sgyl);color:var(--sn);min-height:100vh;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea{font-family:inherit}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+
+/* Login Page */
+.login-wrap{min-height:100vh;display:flex;flex-direction:column}
+.login-hero{flex:1;display:flex;position:relative;overflow:hidden}
+.login-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(135deg,#0A1628 0%,#111D2E 50%,#1A2A3E 100%)}
+.login-bg::after{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=60') center/cover;opacity:0.15}
+.login-content{position:relative;z-index:10;flex:1;display:flex}
+.login-left{flex:1;display:flex;flex-direction:justify-center;padding:48px 64px;max-width:720px;display:flex;flex-direction:column;justify-content:center}
+.login-right{width:100%;max-width:440px;padding:48px 32px;display:flex;align-items:center;justify-content:center}
+.login-form{width:100%;background:#fff;border-radius:16px;padding:40px;box-shadow:0 25px 80px rgba(0,0,0,0.35)}
+
+/* Sidebar */
+.sidebar{position:fixed;left:0;top:0;height:100vh;width:256px;background:linear-gradient(180deg,#0A1628 0%,#0D1E30 100%);color:#fff;z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+.sidebar-logo{padding:24px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-nav{flex:1;padding:12px}
+.sidebar-nav button{width:100%;display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.65);transition:all 0.15s;margin-bottom:2px;text-align:left}
+.sidebar-nav button:hover{color:#fff;background:rgba(255,255,255,0.06)}
+.sidebar-nav button.active{color:#fff;background:var(--sb);box-shadow:0 4px 16px rgba(0,136,216,0.25)}
+.sidebar-user{padding:16px;border-top:1px solid rgba(255,255,255,0.08)}
+
+/* Top Bar */
+.topbar{height:64px;background:#fff;border-bottom:1px solid var(--sgb);display:flex;align-items:center;justify-content:flex-end;padding:0 24px;position:sticky;top:0;z-index:50}
+
+/* Main Content */
+.main-content{margin-left:256px;min-height:100vh}
+.main-inner{padding:24px}
+
+/* Cards */
+.card{background:#fff;border-radius:12px;border:1px solid var(--sgb);box-shadow:0 1px 3px rgba(0,0,0,0.04);overflow:hidden}
+.card-hover{transition:transform 0.2s,box-shadow 0.2s;cursor:pointer}
+.card-hover:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;border-radius:8px;transition:all 0.15s;font-size:14px;padding:10px 20px}
+.btn-primary{background:var(--sb);color:#fff}
+.btn-primary:hover{background:var(--sbd)}
+.btn-outline{border:1.5px solid var(--sb);color:var(--sb);background:transparent}
+.btn-outline:hover{background:var(--sbl)}
+.btn-secondary{background:var(--sn);color:#fff}
+.btn-sm{padding:6px 14px;font-size:13px}
+.btn-lg{padding:14px 28px;font-size:15px}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;border:1px solid}
+.badge-success{background:var(--sgl);color:var(--sgd);border-color:#bbf7d0}
+.badge-warning{background:#fffbeb;color:#b45309;border-color:#fde68a}
+.badge-error{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
+.badge-info{background:var(--sbl);color:var(--sbd);border-color:#bfdbfe}
+
+/* Progress */
+.progress-bar{height:6px;background:var(--sgb);border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--sb),var(--sbd));border-radius:999px;transition:width 0.5s ease}
+
+/* Form inputs */
+.input{width:100%;padding:12px 16px;border:1.5px solid var(--sgb);border-radius:8px;font-size:14px;transition:all 0.15s;background:#fff}
+.input:focus{outline:none;border-color:var(--sb);box-shadow:0 0 0 3px var(--sbl)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn 0.35s ease-out}
+
+/* Pallet Simulator */
+.pallet-base{width:280px;height:40px;background:linear-gradient(180deg,#d4a574 0%,#b8935f 100%);border-radius:4px;position:relative;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+.pallet-base::before,.pallet-base::after{content:'EPAL';position:absolute;bottom:4px;font-size:8px;font-weight:800;color:#8b6914;letter-spacing:1px}
+.pallet-base::before{left:8px}
+.pallet-base::after{right:8px}
+.pallet-slats{display:flex;flex-direction:column;gap:3px;padding:4px;height:100%}
+.pallet-slat{flex:1;background:linear-gradient(180deg,#c49a6c,#b08b5e);border-radius:2px}
+.pallet-product{width:260px;height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,0.3);box-shadow:0 2px 6px rgba(0,0,0,0.2);margin:0 auto}
+
+/* Responsive */
+@media(max-width:1024px){.sidebar{display:none}.main-content{margin-left:0}}
+@media(max-width:768px){.login-content{flex-direction:column}.login-left{padding:32px 24px}.login-right{padding:24px}.login-form{padding:28px}}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+
+// ==================== SVG ICONS ====================
+const I={};
+I.home='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
+I.compass='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>';
+I.gamepad='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg>';
+I.graduation='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10l-10-5-10 5 10 5 10-5z"/><path d="M6 12v5c0 1.66 4 3 6 3s6-1.34 6-3v-5"/></svg>';
+I.shield='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+I.chart='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>';
+I.user='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+I.trophy='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V2z"/></svg>';
+I.lightbulb='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.9.27-1.48.27-2.23A6.27 6.27 0 0 0 9 5.52c-3.42 0-6.09 2.66-6.09 6.25 0 .75.09 1.33.27 2.23"/><path d="M12 2v2"/><path d="M4.22 4.22l1.42 1.42"/><path d="M1 12h2"/><path d="M4.22 19.78l1.42-1.42"/><path d="M19.78 4.22l-1.42 1.42"/><path d="M23 12h-2"/><path d="M19.78 19.78l-1.42-1.42"/></svg>';
+I.bell='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>';
+I.play='<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+I.arrowRight='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+I.arrowLeft='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>';
+I.check='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+I.lock='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+I.mail='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
+I.eye='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+I.eyeOff='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+I.package='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>';
+I.truck='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>';
+I.users='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+I.star='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+I.target='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>';
+I.mapPin='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+I.heart='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+I.trendingUp='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>';
+I.award='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>';
+I.refresh='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+I.rotate='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>';
+I.undo='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>';
+I.chevronLeft='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+I.chevronRight='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+I.info='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+I.alertTriangle='<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+I.construction='<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="8" rx="1"/><path d="M17 14v7"/><path d="M7 14v7"/><path d="M12 14v7"/><path d="M12 6V2"/></svg>';
+I.clock='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+I.send='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+I.message='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+I.calendar='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+I.certificate='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>';
+I.bookOpen='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+I.clipboard='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>';
+I.wrench='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>';
+I.headphones='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>';
+I.logOut='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>';
+I.x='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+I.plus='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+I.minus='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+I.menu='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+
+// ==================== STATE ====================
+const S={
+  auth:false,user:null,page:'login',mod:null,
+  notifs:[
+    {id:'1',title:'Picking Process Update',msg:'New voice pick sequence introduced for chilled products.',type:'update',date:'2h ago',read:false},
+    {id:'2',title:'Mandatory Safety Briefing',msg:'Updated SSOW for LLOP operation now available.',type:'mandatory',date:'1d ago',read:false},
+    {id:'3',title:'Refresher Required',msg:'Your Picking & Pallet Building certification expires in 14 days.',type:'refresher',date:'2d ago',read:true}
+  ],
+  steps:[
+    {id:1,title:'Goods In',desc:'See how we receive, check and prepare products for storage.',status:'completed'},
+    {id:2,title:'Put Away',desc:'Discover how products are stored safely and efficiently.',status:'completed'},
+    {id:3,title:'Picking',desc:'Learn how orders are picked accurately and with care.',status:'in-progress'},
+    {id:4,title:'Marshalling',desc:'See how orders are built, checked and staged for loading.',status:'locked'},
+    {id:5,title:'Loading',desc:'Understand how we load safely and maximise vehicle space.',status:'locked'},
+    {id:6,title:'Customer',desc:'See how we deliver great service to our customers.',status:'locked'}
+  ],
+  placed:[],score:0,simDone:false,rot:0,attempts:1,selProd:null,
+  showSubmit:false,simResult:null
+};
+
+const NAV=[
+  {l:'Welcome',p:'dashboard',i:'home'},
+  {l:'Sysco Starter',p:'starter',i:'compass'},
+  {l:'Sysco Sims',p:'sims',i:'gamepad'},
+  {l:'Sysco Skills',p:'skills',i:'graduation'},
+  {l:'Sysco Safely',p:'safety',i:'shield'},
+  {l:'Operations Hub',p:'operations',i:'chart'},
+  {l:'My Dashboard',p:'my-dashboard',i:'user'},
+  {l:'Achievements',p:'achievements',i:'trophy'},
+  {l:'Help Shape Simply Sysco',p:'feedback',i:'lightbulb'}
+];
+
+const MODS=[
+  {id:'goods-in',title:'Goods In & Putaway',desc:'Receive, check and store incoming stock efficiently.',mgr:'Stan Millership',role:'Goods In Manager',status:'update',color:'#0088D8',n:1},
+  {id:'replenishment',title:'Replenishment',desc:'Keep pick faces stocked and ready for orders.',mgr:'Mark Hilton',role:'Replenishment Manager',status:'update',color:'#4BB92C',n:2},
+  {id:'picking',title:'Picking & Pallet Building',desc:'Pick orders accurately and build stable customer pallets.',mgr:'Lee Scott & Paul White',role:'Picking Managers',status:'live',color:'#F59E0B',n:3},
+  {id:'loading',title:'Loading',desc:'Load vehicles safely and maximise space utilisation.',mgr:'Kenneth Constable',role:'Loading Manager',status:'live',color:'#8B5CF6',n:4},
+  {id:'shunting',title:'Shunting',desc:'Move trailers safely and efficiently around the yard.',mgr:'TBC',role:'Shunting Manager',status:'refresher',color:'#14B8A6',n:5},
+  {id:'delivery',title:'Delivery',desc:'Deliver exceptional service to every customer.',mgr:'Transport Manager',role:'Transport Manager',status:'live',color:'#EF4444',n:6}
+];
+
+const PRODS=[
+  {id:'p1',name:'Chicken Breast',wt:15,frag:false,heavy:true,color:'#E74C3C',cases:1},
+  {id:'p2',name:'Beef Mince',wt:10,frag:false,heavy:true,color:'#C0392B',cases:1},
+  {id:'p3',name:'Mixed Peppers',wt:8,frag:false,heavy:false,color:'#27AE60',cases:1},
+  {id:'p4',name:'Greek Yoghurt',wt:5,frag:true,heavy:false,color:'#3498DB',cases:1},
+  {id:'p5',name:'Butter',wt:3,frag:false,heavy:false,color:'#F39C12',cases:1},
+  {id:'p6',name:'Cakes',wt:2,frag:true,heavy:false,color:'#9B59B6',cases:1}
+];
+
+const ACH=[
+  {id:'1',t:'Perfect Build',d:'Build a pallet with zero errors on first attempt.',u:true,dt:'2024-06-15'},
+  {id:'2',t:'Master Builder',d:'Complete the Picking & Pallet Building simulator.',u:true,dt:'2024-06-15'},
+  {id:'3',t:'Customer First',d:'Demonstrate understanding of customer impact.',u:false},
+  {id:'4',t:'Safety Champion',d:'Complete all health and safety modules.',u:false},
+  {id:'5',t:'Perfect Distribution',d:'Achieve correct weight distribution on every build.',u:false},
+  {id:'6',t:'Zero Damage',d:'Complete a full simulation with zero product damage.',u:false}
+];
+
+const SAFE=[
+  {t:'SSOW',d:'Safe Systems of Work',c:'#0088D8'},
+  {t:'Warehouse Protocols',d:'Standard operating procedures',c:'#4BB92C'},
+  {t:'Accident Investigations',d:'Learn from incidents',c:'#F59E0B'},
+  {t:'Hazard Hunting',d:'Identify and report hazards',c:'#8B5CF6'},
+  {t:'Situational Awareness',d:'Stay alert, stay safe',c:'#EF4444'},
+  {t:'Toolbox Talks',d:'Daily safety briefings',c:'#14B8A6'},
+  {t:'Compliance Learning',d:'Mandatory training modules',c:'#0088D8'}
+];
+
+const OPS=[
+  {t:'Assign Learning',d:'Assign training to colleagues',c:'#0088D8'},
+  {t:'Track Completion',d:'Monitor training progress',c:'#4BB92C'},
+  {t:'View Warehouse Training',d:'Overview of all training',c:'#F59E0B'},
+  {t:'Assign Refresher',d:'Schedule refresher training',c:'#8B5CF6'},
+  {t:'Review Performance',d:'Simulator performance data',c:'#EF4444'},
+  {t:'Monitor KPIs',d:'Key performance indicators',c:'#14B8A6'}
+];
+
+// ==================== HELPERS ====================
+function h(tag,attrs={},children=''){
+  const a=Object.entries(attrs).map(([k,v])=>{
+    if(k==='className')k='class';
+    if(v===true)return k;
+    if(v===false||v==null)return'';
+    return `${k}="${v}"`;
+  }).filter(Boolean).join(' ');
+  return `<${tag}${a?' '+a:''}>${children}</${tag}>`;
+}
+function el(id){return document.getElementById(id)}
+
+// ==================== RENDER ====================
+function render(){
+  const app=el('app');
+  if(!S.auth){app.innerHTML=renderLogin();bindLogin();return}
+  app.innerHTML=h('div',{className:'main-content'},renderTopBar()+h('main',{className:'main-inner fade-in'},renderPage()));
+  bindNav();
+}
+
+function renderLogin(){
+  return h('div',{className:'login-wrap'},
+    h('div',{className:'login-hero'},
+      h('div',{className:'login-bg'},'')+
+      h('div',{className:'login-content'},
+        h('div',{className:'login-left'},
+          h('div',{className:'mb-8'},h('h1',{className:'text-4xl font-bold text-white tracking-tight'},'Sysco'+h('span',{className:'text-[#0088D8]'},'™'))+h('p',{className:'text-white/60 text-sm mt-1'},'Learn. Understand. Deliver.'))+
+          h('h2',{className:'text-5xl lg:text-6xl font-bold text-white leading-tight mb-4'},'Welcome to'+h('br',{})+'Simply '+h('span',{className:'text-[#0088D8]'},'Sysco'))+
+          h('p',{className:'text-xl text-white/80 mb-2'},'Your Digital Warehouse Experience')+
+          h('p',{className:'text-white/60 mb-10 max-w-lg'},"We're excited to have you on board. Simply Sysco is your hub for learning, development and everything you need to succeed at Warrington.")+
+          h('div',{className:'grid grid-cols-2 lg:grid-cols-4 gap-4'},
+            [{t:'Safety First',d:'Looking after ourselves and each other.',c:'#0088D8'},{t:'Customer First',d:'Delivering for our customers, every time.',c:'#4BB92C'},{t:'Do the Right Thing',d:'Act with integrity and take ownership.',c:'#F59E0B'},{t:'Better Every Day',d:'Continuously improve and make an impact.',c:'#8B5CF6'}].map(v=>
+              h('div',{className:'flex flex-col items-start'},
+                h('div',{className:'w-12 h-12 rounded-xl flex items-center justify-center mb-3',style:`background:${v.c}20`},
+                  h('div',{className:'w-6 h-6 rounded-full',style:`background:${v.c}`},'')
+                )+
+                h('h3',{className:'text-white font-semibold text-sm'},v.t)+
+                h('p',{className:'text-white/50 text-xs mt-1'},v.d)
+              )
+            ).join('')
+          )
+        )+
+        h('div',{className:'login-right'},
+          h('div',{className:'login-form'},
+            h('h3',{className:'text-2xl font-bold text-[#0A1628] mb-1'},"Let's get started")+
+            h('p',{className:'text-[#6B7B8D] text-sm mb-6'},'Sign in to begin your learning journey.')+
+            h('form',{id:'loginForm',className:'space-y-4'},
+              h('div',{className:'relative'},
+                h('div',{className:'absolute left-3 top-1/2 -translate-y-1/2 text-[#6B7B8D]'},I.mail)+
+                h('input',{id:'email',type:'email',placeholder:'Email address',className:'input pl-10',required:true},'')
+              )+
+              h('div',{className:'relative'},
+                h('div',{className:'absolute left-3 top-1/2 -translate-y-1/2 text-[#6B7B8D]'},I.mail.replace('width="20"','width="20"').replace('mail','mail'))+
+                h('input',{id:'password',type:'password',placeholder:'Password',className:'input pl-10 pr-10',required:true},'')+
+                h('button',{type:'button',id:'togglePw',className:'absolute right-3 top-1/2 -translate-y-1/2 text-[#6B7B8D]'},I.eye)
+              )+
+              h('div',{id:'loginErr',className:'text-[#EF4444] text-sm hidden'},'')+
+              h('div',{className:'flex items-center justify-between'},
+                h('label',{className:'flex items-center gap-2 cursor-pointer'},
+                  h('input',{type:'checkbox',className:'w-4 h-4 rounded border-[#E2E8F0]'},'')+
+                  h('span',{className:'text-sm text-[#0A1628]'},'Remember me')
+                )+
+                h('button',{type:'button',className:'text-sm text-[#0088D8] font-medium'},'Forgot password?')
+              )+
+              h('button',{type:'submit',className:'btn btn-primary w-full btn-lg'},'Sign In '+I.arrowRight)
+            )+
+            h('div',{className:'relative my-6'},
+              h('div',{className:'absolute inset-0 flex items-center'},h('div',{className:'w-full border-t border-[#E2E8F0]'},''))+
+              h('div',{className:'relative flex justify-center text-xs'},h('span',{className:'px-2 bg-white text-[#6B7B8D]'},'OR'))
+            )+
+            h('button',{type:'button',className:'w-full flex items-center justify-center gap-2 px-4 py-3 border border-[#E2E8F0] rounded-lg text-sm font-medium text-[#0A1628] hover:bg-[#F1F4F8] transition-colors'},
+              h('svg',{width:'20',height:'20',viewBox:'0 0 21 21'},h('path',{fill:'#f25022',d:'M1 1h9v9H1z'})+h('path',{fill:'#00a4ef',d:'M1 11h9v9H1z'})+h('path',{fill:'#7fba00',d:'M11 1h9v9h-9z'})+h('path',{fill:'#ffb900',d:'M11 11h9v9h-9z'}))+
+              'Sign in with Microsoft'
+            )
+          )
+        )
+      )
+    )+
+    h('div',{className:'bg-white border-t border-[#E2E8F0]'},
+      h('div',{className:'max-w-7xl mx-auto px-8 py-8'},
+        h('div',{className:'bg-[#0A1628] rounded-2xl p-6 flex flex-col md:flex-row gap-6 items-center'},
+          h('div',{className:'w-full md:w-64 h-40 bg-[#2D3E50] rounded-xl flex items-center justify-center relative overflow-hidden'},
+            h('div',{className:'absolute inset-0 bg-gradient-to-br from-[#0A1628] to-[#2D3E50]'},'')+
+            h('div',{className:'relative z-10 w-14 h-14 bg-[#0088D8]/90 rounded-full flex items-center justify-center cursor-pointer hover:bg-[#0088D8] transition-colors'},I.play)
+          )+
+          h('div',{className:'flex-1'},
+            h('p',{className:'text-white/60 text-sm mb-1'},'A welcome from')+
+            h('h3',{className:'text-2xl font-bold text-white mb-1'},'Richard Fleming')+
+            h('p',{className:'text-[#0088D8] text-sm mb-3'},'General Manager – Warrington RDC')+
+            h('p',{className:'text-white/70 text-sm max-w-xl mb-4'},"At Warrington, we're proud of what we do and how we do it. You're now part of a team that makes a real difference every single day.")+
+            h('button',{className:'inline-flex items-center gap-2 px-4 py-2 border border-white/20 rounded-lg text-white text-sm hover:bg-white/10 transition-colors'},'Watch Welcome Video '+I.arrowRight)
+          )
+        )
+      )+
+      h('div',{className:'max-w-7xl mx-auto px-8 pb-8'},
+        h('h3',{className:'text-lg font-bold text-[#0A1628] mb-4'},'Our Core Values')+
+        h('div',{className:'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4'},
+          [{t:'Rooted in Integrity',d:'Holding onto the mutual respect and honesty that shaped the company.',c:'#4BB92C'},{t:'Committed to Inclusion',d:'Championing a diverse workplace where everyone feels they have a seat at the table.',c:'#8B5CF6'},{t:'Drive Together',d:"Fostering a team-first environment where shared goals are celebrated collectively as 'one Sysco'.",c:'#0088D8'},{t:'Define Excellence',d:'Pursuing innovation, safety, and operational excellence to outperform expectations.',c:'#F59E0B'},{t:'Grow Responsibly',d:'Shaping the future of food by caring for people, sourcing responsibly, and protecting the planet.',c:'#14B8A6'}].map(v=>
+            h('div',{className:'flex items-start gap-3 p-4 bg-[#F1F4F8] rounded-xl'},
+              h('div',{className:'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',style:`background:${v.c}15`},
+                h('div',{className:'w-5 h-5 rounded-full',style:`background:${v.c}`},'')
+              )+
+              h('div',{},h('h4',{className:'text-sm font-semibold text-[#0A1628]'},v.t)+h('p',{className:'text-xs text-[#6B7B8D] mt-1 leading-relaxed'},v.d))
+            )
+          ).join('')
+        )
+      )
+    )
+  );
+}
+
+function renderSidebar(){
+  const u=S.user,unread=S.notifs.filter(n=>!n.read).length;
+  return h('aside',{className:'sidebar'},
+    h('div',{className:'sidebar-logo'},
+      h('div',{className:'flex items-center gap-2'},
+        h('div',{className:'w-8 h-8 bg-[#0088D8] rounded-lg flex items-center justify-center'},h('span',{className:'text-white font-bold text-sm'},'S'))+
+        h('div',{},h('h1',{className:'text-lg font-bold tracking-tight leading-tight'},'SIMPLY'+h('br',{})+h('span',{className:'text-[#0088D8]'},'SYSCO')))
+      )+
+      h('p',{className:'text-xs text-white/50 mt-1'},'Learn. Understand. Deliver.')
+    )+
+    h('nav',{className:'sidebar-nav'},
+      h('ul',{className:'space-y-0.5'},
+        NAV.map(item=>{
+          const active=S.page===item.p;
+          const badge=item.l==='Welcome'&&unread>0;
+          return h('li',{},h('button',{'data-page':item.p,className:'nav-link'+(active?' active':''),style:active?'background:#0088D8;color:#fff;box-shadow:0 4px 16px rgba(0,136,216,0.25)':''},
+            h('span',{className:'flex items-center justify-center w-5'},I[item.i])+
+            h('span',{className:'flex-1 text-left'},item.l)+
+            (badge?h('span',{className:'bg-[#EF4444] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center'},unread):'')
+          ));
+        }).join('')
+      )
+    )+
+    (u?h('div',{className:'sidebar-user'},
+      h('div',{className:'flex items-center gap-3 mb-3'},
+        h('div',{className:'w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm',style:'background:linear-gradient(135deg,#0088D8,#4BB92C)'},u.avatar)+
+        h('div',{className:'flex-1 min-w-0'},
+          h('p',{className:'text-sm font-medium text-white truncate'},'Welcome back,')+
+          h('p',{className:'text-sm font-bold text-white truncate'},u.name)
+        )
+      )+
+      h('div',{className:'mb-3'},
+        h('div',{className:'flex justify-between text-xs text-white/60 mb-1'},h('span',{},u.role)+h('span',{},'Level '+u.level))+
+        h('div',{className:'w-full h-1.5 bg-white/10 rounded-full overflow-hidden'},
+          h('div',{className:'h-full rounded-full',style:`width:${(u.xp/u.maxXp)*100}%;background:linear-gradient(90deg,#0088D8,#4BB92C)`},'')
+        )+
+        h('p',{className:'text-[10px] text-white/40 mt-1'},u.xp+' / '+u.maxXp+' XP')
+      )+
+      h('div',{className:'space-y-1'},
+        h('button',{className:'flex items-center gap-2 text-xs text-white/50 hover:text-white transition-colors w-full py-1'},I.headphones+' Need help? Contact the team')+
+        h('button',{id:'logoutBtn',className:'flex items-center gap-2 text-xs text-white/50 hover:text-[#EF4444] transition-colors w-full py-1'},I.logOut+' Sign out')
+      )
+    ):'')
+  );
+}
+
+function renderTopBar(){
+  const u=S.user,unread=S.notifs.filter(n=>!n.read).length;
+  return h('header',{className:'topbar'},
+    h('div',{className:'flex items-center gap-4'},
+      h('button',{id:'mobileMenuBtn',className:'lg:hidden p-2 text-[#6B7B8D]'},I.menu)+
+      h('button',{className:'relative p-2 text-[#6B7B8D] hover:text-[#0A1628] transition-colors rounded-lg hover:bg-[#F1F4F8]'},
+        I.bell+(unread>0?h('span',{className:'absolute top-1 right-1 w-4 h-4 bg-[#EF4444] text-white text-[10px] font-bold rounded-full flex items-center justify-center'},unread):'')
+      )+
+      (u?h('div',{className:'flex items-center gap-3'},
+        h('div',{className:'w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-xs',style:'background:linear-gradient(135deg,#0088D8,#4BB92C)'},u.avatar)+
+        h('div',{className:'hidden md:block'},h('p',{className:'text-sm font-semibold text-[#0A1628]'},u.name+' A.'))
+      ):'')
+    )
+  );
+}
+
+function renderPage(){
+  switch(S.page){
+    case 'dashboard':return renderDashboard();
+    case 'starter':return renderStarter();
+    case 'sims':return renderSims();
+    case 'module-detail':return renderModuleDetail();
+    case 'skills':return renderSkills();
+    case 'safety':return renderSafety();
+    case 'operations':return renderOperations();
+    case 'my-dashboard':return renderMyDashboard();
+    case 'achievements':return renderAchievements();
+    case 'feedback':return renderFeedback();
+    case 'simulator':return renderSimulator();
+    default:return renderDashboard();
+  }
+}
+
+function renderDashboard(){
+  return h('div',{className:'space-y-6 fade-in'},
+    h('div',{},h('h1',{className:'text-3xl font-bold text-[#0A1628]'},'Welcome to Simply Sysco')+
+      h('div',{className:'flex items-center gap-3 mt-1'},
+        h('span',{className:'text-[#0088D8] font-medium'},'Your Digital Warehouse Experience')+
+        h('span',{className:'text-[#6B7B8D]'},'•')+
+        h('span',{className:'text-[#6B7B8D]'},'Built by Warrington. For Warrington.')
+      )
+    )+
+    h('div',{className:'grid grid-cols-1 lg:grid-cols-3 gap-6'},
+      h('div',{className:'card bg-[#0A1628] border-[#1A2A3E]'},
+        h('div',{className:'p-6'},
+          h('p',{className:'text-white/60 text-sm mb-1'},'A welcome from')+
+          h('h3',{className:'text-xl font-bold text-white mb-0.5'},'Richard Fleming')+
+          h('p',{className:'text-[#0088D8] text-sm mb-4'},'General Manager')+
+          h('div',{className:'relative w-full h-40 bg-[#2D3E50] rounded-xl mb-4 overflow-hidden'},
+            h('div',{className:'absolute inset-0 bg-gradient-to-br from-[#0A1628] to-[#2D3E50]'},'')+
+            h('div',{className:'absolute inset-0 flex items-center justify-center'},
+              h('div',{className:'w-14 h-14 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm'},I.play)
+            )
+          )+
+          h('p',{className:'text-white/70 text-sm leading-relaxed'},'Welcome to Warrington RDC. Thank you for being part of our team. Together, we deliver for our customers, support our communities and make a difference every single day.')+
+          h('button',{className:'mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#0088D8] text-white rounded-lg text-sm font-medium hover:bg-[#0069A8] transition-colors'},I.play+' Watch Richard's Welcome')
+        )
+      )+
+      h('div',{className:'card bg-[#0A1628] border-[#1A2A3E]'},
+        h('div',{className:'p-6'},
+          h('p',{className:'text-white/60 text-sm mb-1'},'A message from')+
+          h('h3',{className:'text-xl font-bold text-white mb-0.5'},'Cara Hewitt')+
+          h('p',{className:'text-[#0088D8] text-sm mb-4'},'Operations Manager')+
+          h('div',{className:'relative w-full h-40 bg-[#2D3E50] rounded-xl mb-4 overflow-hidden'},
+            h('div',{className:'absolute inset-0 bg-gradient-to-br from-[#0A1628] to-[#2D3E50]'},'')+
+            h('div',{className:'absolute inset-0 flex items-center justify-center'},
+              h('div',{className:'w-14 h-14 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm'},I.play)
+            )
+          )+
+          h('p',{className:'text-white/70 text-sm leading-relaxed'},'Our success is built on teamwork, standards and a shared passion for doing the right thing. I'm proud to work alongside such an amazing team here in Warrington.')+
+          h('button',{className:'mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#0088D8] text-white rounded-lg text-sm font-medium hover:bg-[#0069A8] transition-colors'},I.play+" Watch Cara's Welcome")
+        )
+      )+
+      h('div',{className:'card'},
+        h('div',{className:'relative h-48 bg-[#2D3E50]'},
+          h('div',{className:'absolute inset-0 bg-gradient-to-br from-[#0A1628]/80 to-[#2D3E50]/60'},'')+
+          h('div',{className:'absolute inset-0 flex items-center justify-center'},I.truck.replace('width="20"','width="64"').replace('height="20"','height="64"').replace('currentColor','#0088D830'))
+        )+
+        h('div',{className:'p-5'},
+          h('div',{className:'flex items-start gap-3'},
+            h('div',{className:'w-10 h-10 rounded-lg bg-[#E6F4FC] flex items-center justify-center flex-shrink-0'},I.mapPin)+
+            h('div',{},h('h3',{className:'font-bold text-[#0A1628]'},'Warrington RDC')+h('p',{className:'text-sm text-[#6B7B8D] mt-1'},'Strategically located in the heart of the North West, serving thousands of customers across the UK.'))
+          )
+        )
+      )
+    )+
+    h('div',{className:'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'},
+      [{t:'Our Story',d:'Our history, our purpose and how Warrington plays a vital role.',c:'#0088D8'},{t:'Our People',d:'The people behind the operation. One team, one culture.',c:'#4BB92C'},{t:'Our Customers',d:'Proudly supporting thousands of businesses across the UK.',c:'#F59E0B'},{t:'Our Products',d:'Thousands of products. One quality promise.',c:'#8B5CF6'}].map(card=>
+        h('div',{className:'card card-hover cursor-pointer'},
+          h('div',{className:'p-5'},
+            h('div',{className:'w-10 h-10 rounded-xl flex items-center justify-center mb-3',style:`background:${card.c}15`},
+              h('div',{className:'w-5 h-5 rounded-md',style:`background:${card.c}`},'')
+            )+
+            h('h3',{className:'font-bold text-[#0A1628] mb-1'},card.t)+
+            h('p',{className:'text-sm text-[#6B7B8D] mb-3'},card.d)+
+            h('span',{className:'inline-flex items-center gap-1 text-sm font-medium',style:`color:${card.c}`},'Explore '+I.arrowRight)
+          )+
+          h('div',{className:'h-32 bg-[#F1F4F8] relative overflow-hidden'},
+            h('div',{className:'absolute inset-0 bg-gradient-to-t from-white/50 to-transparent'},'')
+          )
+        )
+      ).join('')
+    )+
+    h('div',{},
+      h('div',{className:'flex items-center justify-between mb-4'},
+        h('div',{},h('h2',{className:'text-xl font-bold text-[#0A1628]'},'Hear from our people')+h('p',{className:'text-sm text-[#6B7B8D]'},'Real stories from real colleagues.'))+
+        h('button',{className:'text-sm text-[#0088D8] font-medium inline-flex items-center gap-1'},'View all stories '+I.arrowRight)
+      )+
+      h('div',{className:'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4'},
+        ['Richard Fleming','Cara Hewitt','Jess M.','Mark P.','Sarah B.','John D.'].map((name,i)=>
+          h('div',{className:'group cursor-pointer'},
+            h('div',{className:'relative aspect-[3/4] rounded-xl overflow-hidden bg-[#2D3E50] mb-2'},
+              h('div',{className:'absolute inset-0 bg-gradient-to-br from-[#0A1628] to-[#2D3E50]'},'')+
+              h('div',{className:'absolute inset-0 flex items-center justify-center'},
+                h('div',{className:'w-10 h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors backdrop-blur-sm'},I.play.replace('width="20"','width="16"').replace('height="20"','height="16"'))
+              )
+            )+
+            h('p',{className:'font-semibold text-sm text-[#0A1628]'},name)+
+            h('p',{className:'text-xs text-[#6B7B8D]'},['General Manager','Operations Manager','Picker','LGV Driver','Admin Team','Facilities Team'][i])
+          )
+        ).join('')
+      )
+    )+
+    h('div',{className:'grid grid-cols-1 lg:grid-cols-3 gap-6'},
+      h('div',{className:'card lg:col-span-2'},
+        h('div',{className:'p-6'},
+          h('div',{className:'flex items-start gap-4'},
+            h('div',{className:'w-12 h-12 rounded-xl bg-[#E8F7E4] flex items-center justify-center flex-shrink-0'},I.heart)+
+            h('div',{className:'flex-1'},
+              h('h3',{className:'text-lg font-bold text-[#0A1628] mb-1'},'Making a Difference')+
+              h('p',{className:'text-sm text-[#6B7B8D] mb-4'},"We're proud to support our colleagues, our community and the environment.")+
+              h('div',{className:'grid grid-cols-2 sm:grid-cols-4 gap-3'},
+                ['Supporting our community','Sourcing responsibly','Reducing environmental impact','Investing in our people'].map(item=>
+                  h('div',{className:'flex flex-col items-center text-center p-3 bg-[#F1F4F8] rounded-lg'},
+                    I.users.replace('width="20"','width="20"').replace('height="20"','height="20"').replace('currentColor','#4BB92C')+
+                    h('p',{className:'text-xs text-[#0A1628] font-medium mt-2'},item)
+                  )
+                ).join('')
+              )
+            )
+          )
+        )
+      )+
+      h('div',{className:'card'},
+        h('div',{className:'p-6'},
+          h('div',{className:'flex items-start gap-4'},
+            h('div',{className:'w-12 h-12 rounded-xl bg-[#E6F4FC] flex items-center justify-center flex-shrink-0'},I.trendingUp)+
+            h('div',{},
+              h('h3',{className:'text-lg font-bold text-[#0A1628] mb-1'},'Warrington in Numbers')+
+              h('p',{className:'text-sm text-[#6B7B8D] mb-4'},'Discover the scale of what we achieve together at Warrington RDC.')+
+              h('button',{className:'inline-flex items-center gap-2 px-4 py-2 border border-[#E2E8F0] rounded-lg text-sm font-medium text-[#6B7B8D] hover:bg-[#F1F4F8] transition-colors'},I.lock+' Coming Soon')
+            )
+          )
+        )
+      )
+    )
+  );
+}
+
+function renderStarter(){
+  const done=S.steps.filter(s=>s.status==='completed').length;
+  return h('div',{className:'space-y-6 fade-in'},
+    h('div',{},h('h1',{className:'text-3xl font-bold text-[#0A1628]'},'Sysco Starter')+h('p',{className:'text-[#6B7B8D] mt-1'},'Your journey through Warrington – from arrival to customer.'))+
+    h('div',{className:'card bg-[#0A1628] border-[#1A2A3E] overflow-hidden'},
+      h('div',{className:'flex flex-col lg:flex-row'},
+        h('div',{className:'flex-1 p-8'},
+          h('p',{className:'text-white/60 text-sm mb-2'},'Welcome to Your Journey')+
+          h('h2',{className:'text-3xl font-bold text-white mb-3'},'See the Bigger Picture')+
+          h('p',{className:'text-white/70 text-sm max-w-lg mb-6'},"Every case we handle has a journey. Follow it from Goods In to our customer's door and discover how every team plays a vital role in making it happen.")+
+          h('div',{className:'flex flex-wrap gap-6 mb-6'},
+            [{i:'target',t:'Understand',d:'Learn how our operation works as one.'},{i:'users',t:'Connect',d:'See how every team makes a difference.'},{i:'star',t:'Contribute',d:'Your role matters in every step.'}].map(item=>
+              h('div',{className:'flex items-center gap-3'},
+                h('div',{className:'w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center'},I[item.i])+
+                h('div',{},h('p',{className:'text-white font-medium text-sm'},item.t)+h('p',{className:'text-white/50 text-xs'},item.d))
+              )
+            ).join('')
+          )+
+          h('div',{className:'flex gap-3'},
+            h('button',{className:'btn btn-primary'},I.play+' Start the Journey')+
+            h('button',{className:'btn',style:'border:1.5px solid rgba(255,255,255,0.2);color:#fff;'},'How it works')
+          )
+        )+
+        h('div',{className:'lg:w-96 relative bg-[#2D3E50] min-h-[250px]'},
+          h('div',{className:'absolute inset-0 bg-gradient-to-l from-transparent to-[#0A1628]/80 z-10'},'')+
+          h('div',{className:'absolute inset-0 flex items-center justify-center z-0'},
+            h('div',{className:'grid grid-cols-3 gap-4 p-6'},
+              [{t:'Goods In',s:'We receive it',c:'#0088D8'},{t:'Put Away',s:'We store it',c:'#4BB92C'},{t:'Picking',s:'We pick it',c:'#F59E0B'},{t:'Marshalling',s:'We build it',c:'#8B5CF6'},{t:'Loading',s:'We load it',c:'#EF4444'},{t:'Customer',s:'We deliver it',c:'#14B8A6'}].map(step=>
+                h('div',{className:'flex flex-col items-center text-center'},
+                  h('div',{className:'w-12 h-12 rounded-full flex items-center justify-center mb-1',style:`background:${step.c}30`},
+                    h('div',{className:'w-3 h-3 rounded-full',style:`background:${step.c}`},'')
+                  )+
+                  h('p',{className:'text-white text-xs font-medium'},step.t)+
+                  h('p',{className:'text-white/50 text-[10px]'},step.s)
+                )
+              ).join('')
+            )
+          )
+        )
+      )
+    )+
+    h('div',{},
+      h('h2',{className:'text-xl font-bold text-[#0A1628] mb-4'},'Your Learning Journey')+
+      h('p',{className:'text-sm text-[#6B7B8D] mb-4'},'Complete each process to unlock the full Picking Simulator.')+
+      h('div',{className:'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4'},
+        S.steps.map((step,i)=>{
+          const done=step.status==='completed',prog=step.status==='in-progress',lock=step.status==='locked';
+          return h('div',{className:'card overflow-hidden'+(lock?' opacity-70':'')},
+            h('div',{className:'relative h-32 bg-[#F1F4F8] overflow-hidden'},
+              h('div',{className:'absolute top-3 left-3 w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold z-10',style:`background:${done?'#4BB92C':prog?'#0088D8':'#94A3B8'}`},
+                done?I.check:(i+1)
+              )+
+              h('div',{className:'absolute inset-0 flex items-center justify-center'},
+                h('div',{className:'w-12 h-12 rounded-full flex items-center justify-center',style:`background:${['#0088D8','#4BB92C','#F59E0B','#8B5CF6','#EF4444','#14B8A6'][i]}15`},
+                  h('div',{className:'w-5 h-5 rounded-full',style:`background:${['#0088D8','#4BB92C','#F59E0B','#8B5CF6','#EF4444','#14B8A6'][i]}`},'')
+                )
+              )+
+              (lock?h('div',{className:'absolute inset-0 bg-white/60 flex items-center justify-center'},I.lock.replace('width="16"','width="32"').replace('height="16"','height="32"').replace('currentColor','#94A3B8')):'')
+            )+
+            h('div',{className:'p-4'},
+              h('h3',{className:'font-bold text-sm mb-1'+(prog?' text-[#4BB92C]':' text-[#0A1628]')},step.title)+
+              h('p',{className:'text-xs text-[#6B7B8D] mb-3'},step.desc)+
+              h('div',{className:'flex items-center gap-2'},
+                done?h('span',{className:'badge badge-success text-xs'},I.check+' Completed'):
+                prog?h('span',{className:'badge badge-info text-xs'},I.compass+' In progress'):
+                h('span',{className:'badge text-xs',style:'background:#F1F4F8;color:#6B7B8D;border-color:#E2E8F0'},I.lock+' Locked')
+              )
+            )
+          );
+        }).join('')
+      )
+    )+
+    h('div',{className:'card bg-[#E6F4FC] border-blue-200'},
+      h('div',{className:'p-6'},
+        h('div',{className:'flex flex-col md:flex-row items-center gap-6'},
+          h('div',{className:'w-16 h-16 rounded-2xl bg-[#0088D8] flex items-center justify-center flex-shrink-0'},I.compass.replace('width="20"','width="32"').replace('height="20"','height="32"').replace('currentColor','#fff'))+
+          h('div',{className:'flex-1'},
+            h('h3',{className:'text-lg font-bold text-[#0A1628] mb-1'},'Complete all processes to unlock Sysco Sims')+
+            h('p',{className:'text-sm text-[#6B7B8D]'},'Reinforce your learning with interactive challenges and earn your certificate.')
+          )+
+          h('div',{className:'flex items-center gap-4'},
+            h('div',{className:'text-center'},h('p',{className:'text-2xl font-bold text-[#0A1628]'},done+' / 6')+h('p',{className:'text-xs text-[#6B7B8D]'},'Processes completed'))+
+            h('div',{className:'w-32'},h('div',{className:'progress-bar'},h('div',{className:'progress-fill',style:`width:${(done/6)*100}%`},'')))+
+            h('button',{className:'btn btn-secondary btn-sm',disabled:done<6},'View Sysco Sims '+I.arrowRight)
+          )
+        )+
+        (done<6?h('p',{className:'text-xs text-[#6B7B8D] mt-3 text-center'},'Locked until all 6 processes are completed'):'')
+      )
+    )+
+    h('div',{className:'card'},
+      h('div',{className:'p-6'},
+        h('h3',{className:'text-lg font-bold text-[#0A1628] mb-4'},"What you'll learn")+
+        h('div',{className:'grid grid-cols-1 sm:grid-cols-2 gap-3'},
+          [{i:'check',t:'Knowledge and confidence'},{i:'award',t:'Digital certificate'},{i:'star',t:'Points and achievements'},{i:'shield',t:'A safer, stronger operation'}].map(item=>
+            h('div',{className:'flex items-center gap-3'},
+              h('span',{className:'text-[#0088D8]'},I[item.i])+
+              h('span',{className:'text-sm text-[#0A1628]'},item.t)
+            )
+          ).join('')
+        )
+      )
+    )
+  );
+}
+
+function renderSims(){
+  return h('div',{className:'space-y-6 fade-in'},
+    h('div',{className:'relative'},
+      h('div',{className:'absolute inset-0 bg-[#0A1628] rounded-2xl -z-10'},'')+
+      h('div',{className:'p-8'},
+        h('h1',{className:'text-4xl font-bold text-white mb-2'},'Sysco Sims')+
+        h('p',{className:'text-[#0088D8] text-lg font-medium mb-2'},'Learn. Practise. Improve.')+
+        h('p',{className:'text-white/70'},'One Case. Many Hands. One Destination.')
+      )
+    )+
+    h('div',{className:'grid grid-cols-1 md:grid-cols-3 gap-4'},
+      [{i:'gamepad',t:'Realistic Simulations',d:'Experience real warehouse scenarios in a safe environment.'},{i:'trendingUp',t:'Build Confidence',d:'Practise, make decisions and improve your skills.'},{i:'award',t:'Earn & Progress',d:'Complete simulations, earn badges and track your growth.'}].map(feat=>
+        h('div',{className:'card bg-[#0A1628] border-[#1A2A3E]'},
+          h('div',{className:'p-5 flex items-start gap-4'},
+            h('div',{className:'w-12 h-12 rounded-xl bg-[#0088D8]/20 flex items-center justify-center flex-shrink-0'},I[feat.i].replace('width="20"','width="24"').replace('height="20"','height="24"').replace('currentColor','#0088D8'))+
+            h('div',{},h('h3',{className:'text-white font-semibold mb-1'},feat.t)+h('p',{className:'text-white/60 text-sm'},feat.d))
+          )
+        )
+      ).join('')
+    )+
+    h('div',{},
+      h('div',{className:'flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4'},
+        h('div',{},h('h2',{className:'text-xl font-bold text-[#0A1628]'},'All Simulations')+h('p',{className:'text-sm text-[#6B7B8D]'},'Select a process to start your simulation journey.'))+
+        h('div',{className:'flex items-center gap-4'},
+          h('div',{className:'flex items-center gap-2'},
+            h('span',{className:'text-sm text-[#6B7B8D]'},'View by:')+
+            h('button',{className:'flex items-center gap-1 px-3 py-1.5 border border-[#E2E8F0] rounded-lg text-sm font-medium text-[#0A1628] hover:bg-[#F1F4F8]'},'Process Flow '+I.chevronRight.replace('width="16"','width="12"').replace('height="16"','height="12"').replace('polyline','polyline style="transform:rotate(90deg);transform-origin:center"'))
+          )+
+          h('div',{className:'hidden md:flex items-center gap-4 text-xs'},
+            h('span',{className:'flex items-center gap-1'},h('span',{className:'w-2 h-2 rounded-full bg-[#4BB92C]'},'')+' Live')+
+            h('span',{className:'flex items-center gap-1'},h('span',{className:'w-2 h-2 rounded-full bg-[#F59E0B]'},'')+' Update Available')+
+            h('span',{className:'flex items-center gap-1'},h('span',{className:'w-2 h-2 rounded-full bg-[#EF4444]'},'')+' Refresher Required')+
+            h('span',{className:'flex items-center gap-1'},h('span',{className:'w-2 h-2 rounded-full bg-[#94A3B8]'},'')+' Coming Soon')
+          )
+        )
+      )+
+      h('div',{className:'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4'},
+        MODS.map((mod,i)=>{
+          const st=mod.status==='live'?{l:'Live',c:'badge-success',i:I.check}:{l:'Update Available',c:'badge-warning',i:I.refresh};
+          return h('div',{className:'card card-hover overflow-hidden'},
+            h('div',{className:'p-5'},
+              h('div',{className:'flex items-center justify-between mb-3'},
+                h('div',{className:'w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold',style:`background:${mod.color}`},mod.n)+
+                h('div',{style:`color:${mod.color}`},I.package.replace('width="20"','width="24"').replace('height="20"','height="24"'))
+              )+
+              h('h3',{className:'font-bold text-[#0A1628] text-sm mb-2 min-h-[40px]'},mod.title)+
+              h('span',{className:'badge '+st.c+' mb-3 text-xs'},st.i+' '+st.l)
+            )+
+            h('div',{className:'h-32 bg-[#F1F4F8] relative overflow-hidden'},
+              h('div',{className:'absolute inset-0 bg-gradient-to-t from-white/50 to-transparent'},'')
+            )+
+            h('div',{className:'p-5'},
+              h('p',{className:'text-xs text-[#6B7B8D] mb-3'},mod.desc)+
+              h('button',{className:'btn btn-outline btn-sm w-full','data-mod':mod.id,onclick:'goMod(this)'},'View Simulation '+I.arrowRight)
+            )
+          );
+        }).join('')
+      )
+    )+
+    h('div',{className:'grid grid-cols-1 lg:grid-cols-3 gap-6'},
+      h('div',{className:'card lg:col-span-2'},
+        h('div',{className:'p-6'},
+          h('div',{className:'flex items-start gap-4'},
+            h('div',{className:'w-12 h-12 rounded-xl bg-[#E6F4FC] flex items-center justify-center flex-shrink-0'},I.bell.replace('width="20"','width="24"').replace('height="20"','height="24"').replace('currentColor','#0088D8'))+
+            h('div',{className:'flex-1'},
+              h('h3',{className:'text-lg font-bold text-[#0A1628] mb-1'},'Stay up to date')+
+              h('p',{className:'text-sm text-[#6B7B8D] mb-4'},"We'll let you know when your assigned simulations have updates, new content or refresher training available.")+
+              h('div',{className:'space-y-3'},
+                [{t:'Goods In & Putaway',d:'Process update available',ty:'update',tm:'Today, 09:15'},{t:'Replenishment',d:'Process update available',ty:'update',tm:'Today, 09:10'},{t:'Shunting',d:'Refresher training recommended',ty:'refresher',tm:'Today, 08:45'},{t:'Loading',d:'New simulation content added',ty:'info',tm:'Yesterday, 16:45'}].map(u=>
+                  h('div',{className:'flex items-center justify-between py-2 border-b border-[#E2E8F0] last:border-0'},
+                    h('div',{className:'flex items-center gap-3'},
+                      h('span',{className:'w-2 h-2 rounded-full',style:`background:${u.ty==='update'?'#F59E0B':u.ty==='refresher'?'#EF4444':'#94A3B8'}`},'')+
+                      h('span',{className:'text-sm text-[#0A1628]'},u.t+' – '+u.d)
+                    )+
+                    h('span',{className:'text-xs text-[#6B7B8D]'},u.tm)
+                  )
+                ).join('')
+              )
+            )
+          )
+        )
+      )+
+      h('div',{className:'card'},
+        h('div',{className:'p-6'},
+          h('h3',{className:'text-lg font-bold text-[#0A1628] mb-4'},'Your Assigned Simulations')+
+          h('div',{className:'flex items-center justify-center'},
+            h('div',{className:'relative w-32 h-32'},
+              h('svg',{className:'w-full h-full -rotate-90',viewBox:'0 0 36 36'},
+                h('path',{d:'M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831',fill:'none',stroke:'#E2E8F0','stroke-width':'3'})+
+                h('path',{d:'M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831',fill:'none',stroke:'#4BB92C','stroke-width':'3','stroke-dasharray':'83, 100'})
+              )+
+              h('div',{className:'absolute inset-0 flex flex-col items-center justify-center'},
+                h('span',{className:'text-3xl font-bold text-[#0A1628]'},'83%')+
+                h('span',{className:'text-xs text-[#6B7B8D]'},'Completed')
+              )
+            )
+          )+
+          h('div',{className:'text-center mt-4'},
+            h('p',{className:'text-2xl font-bold text-[#0A1628]'},'6')+
+            h('p',{className:'text-sm text-[#6B7B8D]'},'Total Assigned')
+          )
+        )
+      )
+    )
+  );
+}
+
+function renderModuleDetail(){
+  const mod=MODS.find(m=>m.id===S.mod);
+  if(!mod)return h('div',{className:'text-center py-20'},h('h2',{className:'text-xl font-bold text-[#0A1628] mb-2'},'Module not found')+h('button',{className:'btn btn-primary',onclick:'goPage("sims")'},I.arrowLeft+' Back to All Simulations'));
+  const st=mod.status==='live'?{l:'Available',c:'#4BB92C'}:mod.status==='update'?{l:'Update Available',c:'#F59E0B'}:{l:'Refresher Required',c:'#EF4444'};
+  const exp=[{t:'Work safely, every time',d:'Follow all safety rules and use MHE correctly.'},{t:'Be accurate',d:'Check everything, trust nothing.'},{t:'Keep it moving',d:'Work efficiently to keep the operation flowing.'},{t:'Look after our stock',d:'Quality in, quality stored, quality out.'}];
+  const kpis=[{n:'Inbound Accuracy',v:'99.2%',u:true},{n:'Putaway Accuracy',v:'98.7%',u:true},{n:'Damaged Inbound',v:'0.42%',u:false},{n:'Putaway Timeliness',v:'96.1%',u:true},{n:'Safety Compliance',v:'100%',u:true}];
+  const objs=['Receive and check deliveries accurately','Identify and report damaged or incorrect stock','Putaway stock to the correct location safely','Update the system accurately and in real time','Follow all safety rules and MHE procedures'];
+  const rules=['Always follow safety rules and wear correct PPE','Use MHE only if you are trained and authorised','Check before you accept – accuracy is key','Store stock in the correct location','Report issues, don't hide them','Keep your area clean and organised'];
+  const sim=[{t:'Receive deliveries',d:'Check, verify and accept stock into the warehouse.'},{t:'Check & inspect',d:'Verify quantities, quality and product condition.'},{t:'Putaway stock',d:'Store in the correct location using safe MHE practices.'},{t:'Complete documentation',d:'Accurate system updates and stock recording.'}];
+  return h('div',{className:'space-y-6 fade-in'},
+    h('button',{className:'inline-flex items-center gap-2 text-sm text-[#0088D8] hover:underline mb-2',onclick:'goPage("sims")'},I.arrowLeft+' Back to All Simulations')+
+    h('div',{className:'relative'},
+      h('div',{className:'absolute inset-0 bg-[#0A1628] rounded-2xl -z-10'},'')+
+      h('div',{className:'p-8'},
+        h('div',{className:'flex items-center gap-4 mb-4'},
+          h('div',{className:'w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold',style:`background:${mod.color}`},mod.n)+
+          h('div',{},h('h1',{className:'text-3xl font-bold text-white'},mod.title)+h('span',{className:'badge mt-1',style:`background:${st.c}20;color:${st.c};border-color:${st.c}40`},h('span',{className:'w-2 h-2 rounded-full mr-2',style:`background:${st.c}`},'')+'Status: '+st.l))
+        )+
+        h('p',{className:'text-white/70 max-w-2xl'},'The first step in our operation. Receive, check and putaway stock safely and accurately to keep our warehouse flowing.')
+      )
+    )+
+    h('div',{className:'grid grid-cols-1 lg:grid-cols-3 gap-6'},
+      h('div',{className:'card bg-[#0A1628] border-[#1A2A3E]'},
+        h('div',{className:'p-6'},
+          h('p',{className:'text-white/60 text-sm mb-1'},'Welcome from '+mod.mgr)+
+          h('h3',{className:'text-lg font-bold text-white mb-0.5'},mod.mgr)+
+          h('p',{className:'text-[#0088D8] text-sm mb-4'},mod.role)+
+          h('div',{className:'relative aspect-video bg-[#2D3E50] rounded-xl mb-4 overflow-hidden'},
+            h('div',{className:'absolute inset-0 flex items-center justify-center'},
+              h('div',{className:'w-16 h-16 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm'},I.play.replace('width="20"','width="28"').replace('height="20"','height="28"'))
+            ),
+            h('div',{className:'absolute bottom-3 left-3 flex items-center gap-2 text-white text-xs'},I.play.replace('width="20"','width="12"').replace('height="20"','height="12"')+' 0:00 / 1:45')
+          )+
+          h('p',{className:'text-white/60 text-sm'},mod.mgr+' shares what great looks like in '+mod.title+' and what we expect from every colleague in this area.')
+        )
+      )+
+      h('div',{className:'card bg-[#0A1628] border-[#1A2A3E]'},
+        h('div',{className:'p-6'},
+          h('h3',{className:'text-lg font-bold text-white mb-4'},'In this simulation')+
+          h('p',{className:'text-white/60 text-sm mb-4'},"You'll experience realistic warehouse scenarios based on your daily tasks.")+
+          h('div',{className:'space-y-4'},
+            sim.map((item,i)=>h('div',{className:'flex items-start gap-3'},
+              h('div',{className:'w-8 h-8 rounded-lg bg-[#0088D8]/20 flex items-center justify-center flex-shrink-0 mt-0.5'},I.target.replace('width="20"','width="16"').replace('height="20"','height="16"').replace('currentColor','#0088D8'))+
+              h('div',{},h('p',{className:'text-white font-medium text-sm'},item.t)+h('p',{className:'text-white/50 text-xs'},item.d))
+            )).join('')
+          )
+        )
+      )+
+      h('div',{className:'space-y-6'},
+        h('div',{className:'card bg-[#0A1628] border-[#1A2A3E]'},
+          h('div',{className:'p-6'},
+            h('h3',{className:'text-lg font-bold text-white mb-4'},'Our expectations')+
+            h('div',{className:'space-y-3'},
+              exp.map((e,i)=>h('div',{className:'flex items-start gap-3'},
+                h('div',{className:'w-8 h-8 rounded-lg bg-[#0088D8]/20 flex items-center justify-center flex-shrink-0'},I.check.replace('width="16"','width="16"').replace('height="16"','height="16"').replace('currentColor','#0088D8'))+
+                h('div',{},h('p',{className:'text-white font-medium text-sm'},e.t)+h('p',{className:'text-white/50 text-xs'},e.d))
+              )).join('')
+            )
+          )
+        ),
+        h('div',{className:'card bg-[#0A1628] border-[#1A2A3E]'},
+          h('div',{className:'p-6'},
+            h('div',{className:'flex items-center justify-between mb-4'},
+              h('h3',{className:'text-lg font-bold text-white'},'Department KPIs')+
+              h('button',{className:'text-[#0088D8] text-sm hover:underline'},'View all KPIs '+I.arrowRight.replace('width="16"','width="12"').replace('height="16"','height="12"'))
+            ),
+            h('div',{className:'space-y-3'},
+              kpis.map((k,i)=>h('div',{className:'flex items-center justify-between'},
+                h('div',{className:'flex items-center gap-2'},I.target.replace('width="20"','width="16"').replace('height="20"','height="16"').replace('currentColor','rgba(255,255,255,0.4)')+h('span',{className:'text-white/70 text-sm'},k.n))+
+                h('div',{className:'flex items-center gap-2'},h('span',{className:'text-white font-bold text-sm'},k.v)+I.trendingUp.replace('width="20"','width="16"').replace('height="20"','height="16"').replace('currentColor',k.u?'#4BB92C':'#EF4444'))
+              )).join('')
+            )
+          )
+        )
+      )
+    )+
+    h('div',{className:'grid grid-cols-1 lg:grid-cols-3 gap-6'},
+      h('div',{className:'card bg-[#0A1628] border-[#1A2A3E]'},
+        h('div',{className:'p-6'},
+          h('div',{className:'flex items-center gap-3 mb-4'},
+            h('div',{className:'w-10 h-10 rounded-xl bg-[#0088D8]/20 flex items-center justify-center'},I.target.replace('width="20"','width="20"').replace('height="20"','height="20"').replace('currentColor','#0088D8'))+
+            h('div',{},h('h3',{className:'text-lg font-bold text-white'},'Objectives')+h('p',{className:'text-white/50 text-xs'},'By completing this simulation, you will be able to:'))
+          )+
+          h('div',{className:'space-y-2'},
+            objs.map(o=>h('div',{className:'flex items-start gap-2'},I.check.replace('width="16"','width="16"').replace('height="16"','height="16"').replace('currentColor','#4BB92C')+h('span',{className:'text-white/70 text-sm'},o))).join('')
+          )
+        )
+      ),
+      h('div',{className:'card bg-[#0A1628] border-[#1A2A3E]'},
+        h('div',{className:'p-6'},
+          h('div',{className:'flex items-center gap-3 mb-4'},
+            h('div',{className:'w-10 h-10 rounded-xl bg-[#0088D8]/20 flex items-center justify-center'},I.shield.replace('width="20"','width="20"').replace('height="20"','height="20"').replace('currentColor','#0088D8'))+
+            h('h3',{className:'text-lg font-bold text-white'},'Rules to follow')
+          )+
+          h('div',{className:'space-y-2'},
+            rules.map(r=>h('div',{className:'flex items-start gap-2'},I.check.replace('width="16"','width="16"').replace('height="16"','height="16"').replace('currentColor','#0088D8')+h('span',{className:'text-white/70 text-sm'},r))).join('')
+          )
+        )
+      ),
+      h('div',{className:'card bg-[#0A1628] border-[#1A2A3E]'},
+        h('div',{className:'p-6'},
+          h('div',{className:'flex items-start gap-4 mb-6'},
+            h('div',{className:'w-14 h-14 rounded-xl bg-[#0088D8]/20 flex items-center justify-center flex-shrink-0'},I.package.replace('width="20"','width="28"').replace('height="20"','height="28"').replace('currentColor','#0088D8'))+
+            h('div',{},h('h3',{className:'text-lg font-bold text-white mb-1'},'Ready to begin?')+h('p',{className:'text-white/60 text-sm'},'Launch the simulation and put your knowledge into action.'))
+          )+
+          h('button',{className:'btn btn-primary w-full mb-4 btn-lg',onclick:'launchSim()'},'Launch Simulation '+I.arrowRight)+
+          h('div',{className:'flex items-center justify-center gap-4 text-xs text-white/40'},
+            h('span',{className:'flex items-center gap-1'},I.clock+' Estimated time: 20 minutes')+
+            h('span',{},'|')+
+            h('span',{},'Pass mark: 85%')
+          )
+        )
+      )
+    )
+  );
+}
+
+function renderSkills(){return h('div',{className:'flex flex-col items-center justify-center py-20 fade-in'},h('div',{className:'w-20 h-20 bg-[#E6F4FC] rounded-2xl flex items-center justify-center mb-6'},I.construction.replace('width="40"','width="40"').replace('height="40"','height="40"').replace('currentColor','#0088D8'))+h('h1',{className:'text-2xl font-bold text-[#0A1628] mb-2'},'Sysco Skills')+h('p',{className:'text-[#6B7B8D] max-w-md text-center'},'Future warehouse skills training modules will be available here. This section is currently under development.'));}
+
+function renderSafety(){return h('div',{className:'space-y-6 fade-in'},h('div',{},h('h1',{className:'text-3xl font-bold text-[#0A1628]'},'Sysco Safely')+h('p',{className:'text-[#6B7B8D] mt-1'},'Health & Safety hub for Warrington RDC.'))+h('div',{className:'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'},SAFE.map(m=>h('div',{className:'card card-hover cursor-pointer'},h('div',{className:'p-5'},h('div',{className:'w-12 h-12 rounded-xl flex items-center justify-center mb-3',style:`background:${m.c}15`},h('div',{className:'w-6 h-6 rounded-md',style:`background:${m.c}`},''))+h('h3',{className:'font-bold text-[#0A1628] mb-1'},m.t)+h('p',{className:'text-sm text-[#6B7B8D]'},m.d))))).join('')));}
+
+function renderOperations(){return h('div',{className:'space-y-6 fade-in'},h('div',{},h('h1',{className:'text-3xl font-bold text-[#0A1628]'},'Operations Hub')+h('p',{className:'text-[#6B7B8D] mt-1'},'Manager Dashboard for Warrington RDC.'))+h('div',{className:'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'},OPS.map(t=>h('div',{className:'card card-hover cursor-pointer'},h('div',{className:'p-5'},h('div',{className:'w-12 h-12 rounded-xl flex items-center justify-center mb-3',style:`background:${t.c}15`},h('div',{className:'w-6 h-6 rounded-md',style:`background:${t.c}`},''))+h('h3',{className:'font-bold text-[#0A1628] mb-1'},t.t)+h('p',{className:'text-sm text-[#6B7B8D]'},t.d))))).join('')));}
+
+function renderMyDashboard(){return h('div',{className:'space-y-6 fade-in'},h('div',{},h('h1',{className:'text-3xl font-bold text-[#0A1628]'},'My Dashboard')+h('p',{className:'text-[#6B7B8D] mt-1'},'Your personal learning progress and achievements.')),h('div',{className:'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'},[{i:'trendingUp',t:'75%',s:'Overall Progress',bar:true},{i:'award',t:'12',s:'Achievements'},{i:'star',t:'450',s:'XP Points'},{i:'certificate',t:'3',s:'Certificates'}].map(item=>h('div',{className:'card'},h('div',{className:'p-5'},h('div',{className:'flex items-center gap-3 mb-3'},h('div',{className:'w-10 h-10 rounded-xl bg-[#E6F4FC] flex items-center justify-center'},I[item.i].replace('width="20"','width="20"').replace('height="20"','height="20"').replace('currentColor','#0088D8')),h('div',{},h('p',{className:'text-2xl font-bold text-[#0A1628]'},item.t)+h('p',{className:'text-xs text-[#6B7B8D]'},item.s))),(item.bar?h('div',{className:'progress-bar'},h('div',{className:'progress-fill',style:'width:75%'},'')):''))))).join('')),h('div',{className:'grid grid-cols-1 lg:grid-cols-2 gap-6'},h('div',{className:'card'},h('div',{className:'p-5'},h('h3',{className:'font-bold text-[#0A1628] mb-4'},'Training History'),h('div',{className:'space-y-3'},[{t:'Sysco Starter - Goods In',d:'Completed 2 days ago',s:'completed'},{t:'Sysco Starter - Put Away',d:'Completed yesterday',s:'completed'},{t:'Sysco Starter - Picking',d:'In progress',s:'in-progress'}].map(item=>h('div',{className:'flex items-center justify-between p-3 bg-[#F1F4F8] rounded-lg'},h('div',{className:'flex items-center gap-3'},I.bookOpen.replace('width="20"','width="20"').replace('height="20"','height="20"').replace('currentColor','#0088D8'),h('div',{},h('p',{className:'text-sm font-medium text-[#0A1628]'},item.t),h('p',{className:'text-xs text-[#6B7B8D]'},item.d))),h('span',{className:'text-xs font-medium px-2 py-1 rounded-full '+(item.s==='completed'?'bg-[#E8F7E4] text-[#3A9422]':'bg-[#E6F4FC] text-[#0069A8]')},item.s==='completed'?'Completed':'In Progress')))).join('')))),h('div',{className:'card'},h('div',{className:'p-5'},h('h3',{className:'font-bold text-[#0A1628] mb-4'},'Scheduled Learning'),h('div',{className:'space-y-3'},[{t:'Picking & Pallet Building',d:'Due in 3 days',ty:'mandatory'},{t:'Health & Safety Refresher',d:'Due in 7 days',ty:'refresher'},{t:'Loading Simulator',d:'Due in 14 days',ty:'optional'}].map(item=>h('div',{className:'flex items-center justify-between p-3 bg-[#F1F4F8] rounded-lg'},h('div',{className:'flex items-center gap-3'},I.calendar.replace('width="20"','width="20"').replace('height="20"','height="20"').replace('currentColor','#0088D8'),h('div',{},h('p',{className:'text-sm font-medium text-[#0A1628]'},item.t),h('p',{className:'text-xs text-[#6B7B8D]'},item.d))),h('span',{className:'text-xs font-medium px-2 py-1 rounded-full '+(item.ty==='mandatory'?'bg-red-50 text-red-600':item.ty==='refresher'?'bg-amber-50 text-amber-600':'bg-[#F1F4F8] text-[#6B7B8D]')},item.ty.charAt(0).toUpperCase()+item.ty.slice(1))))).join('')))))));}
+
+function renderAchievements(){return h('div',{className:'space-y-6 fade-in'},h('div',{},h('h1',{className:'text-3xl font-bold text-[#0A1628]'},'Achievements')+h('p',{className:'text-[#6B7B8D] mt-1'},'Meaningful achievements based on skill, not just speed.')),h('div',{className:'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'},ACH.map(ach=>h('div',{className:'card '+(ach.u?'':'opacity-60')},h('div',{className:'p-5'},h('div',{className:'flex items-start gap-4'},h('div',{className:'w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 '+(ach.u?'bg-[#E6F4FC]':'bg-[#F1F4F8]')},ach.u?I.award.replace('width="20"','width="28"').replace('height="20"','height="28"').replace('currentColor','#0088D8'):I.lock.replace('width="16"','width="28"').replace('height="16"','height="28"').replace('currentColor','#94A3B8')),h('div',{className:'flex-1'},h('h3',{className:'font-bold text-[#0A1628] mb-1'},ach.t),h('p',{className:'text-sm text-[#6B7B8D] mb-2'},ach.d),ach.u&&ach.dt?h('div',{className:'flex items-center gap-1 text-xs text-[#4BB92C]'},I.check+' Unlocked '+ach.dt):h('span',{className:'text-xs text-[#6B7B8D]'},'Locked'))))))).join('')));}
+
+function renderFeedback(){
+  return h('div',{className:'space-y-6 fade-in'},
+    h('div',{},h('h1',{className:'text-3xl font-bold text-[#0A1628]'},'Help Shape Simply Sysco')+h('p',{className:'text-[#6B7B8D] mt-1'},'Continuous Improvement portal. Your feedback matters.')),
+    h('div',{className:'grid grid-cols-1 lg:grid-cols-3 gap-6'},
+      h('div',{className:'lg:col-span-2'},
+        h('div',{className:'card'},
+          h('div',{className:'p-6'},
+            h('h3',{className:'text-lg font-bold text-[#0A1628] mb-4'},'Submit Feedback'),
+            h('form',{id:'fbForm',className:'space-y-4'},
+              h('div',{},h('label',{className:'block text-sm font-medium text-[#0A1628] mb-2'},'Feedback Type'),h('div',{className:'flex gap-2 flex-wrap'},[{l:'Idea',i:'lightbulb'},{l:'Feedback',i:'message'},{l:'Problem',i:'alertTriangle'},{l:'Suggestion',i:'send'}].map(t=>h('button',{type:'button',className:'flex items-center gap-2 px-4 py-2 border border-[#E2E8F0] rounded-lg text-sm hover:bg-[#F1F4F8] transition-colors'},I[t.i].replace('width="20"','width="16"').replace('height="20"','height="16"')+' '+t.l))).join(''))),
+              h('div',{},h('label',{className:'block text-sm font-medium text-[#0A1628] mb-2'},'Your Message'),h('textarea',{rows:5,className:'input resize-none',placeholder:'Share your ideas, feedback, problems or suggestions...'},'')),
+              h('div',{className:'flex items-center justify-between'},
+                h('label',{className:'flex items-center gap-2 cursor-pointer'},h('input',{type:'checkbox',className:'w-4 h-4 rounded border-[#E2E8F0]'}),h('span',{className:'text-sm text-[#0A1628]'},'Submit anonymously')),
+                h('button',{type:'submit',className:'btn btn-primary'},I.send+' Submit Feedback')
+              )
+            )
+          )
+        )
+      ),
+      h('div',{className:'card'},
+        h('div',{className:'p-5'},
+          h('h3',{className:'font-bold text-[#0A1628] mb-3'},'Recent Submissions'),
+          h('div',{className:'space-y-3'},
+            [{t:'Idea',tx:'Add dark mode to the dashboard',a:'Anonymous',d:'2 days ago'},{t:'Feedback',tx:'Love the new simulator design!',a:'Liam A.',d:'3 days ago'},{t:'Suggestion',tx:'More video content in Sysco Starter',a:'Sarah B.',d:'1 week ago'}].map(s=>
+              h('div',{className:'p-3 bg-[#F1F4F8] rounded-lg'},
+                h('div',{className:'flex items-center gap-2 mb-1'},
+                  h('span',{className:'text-[10px] font-bold px-1.5 py-0.5 rounded '+(s.t==='Idea'?'bg-[#E6F4FC] text-[#0088D8]':s.t==='Feedback'?'bg-[#E8F7E4] text-[#4BB92C]':'bg-amber-50 text-amber-600')},s.t),
+                  h('span',{className:'text-[10px] text-[#6B7B8D]'},s.d)
+                ),
+                h('p',{className:'text-xs text-[#0A1628]'},s.tx),
+                h('p',{className:'text-[10px] text-[#6B7B8D] mt-1'},'by '+s.a)
+              )
+            ).join('')
+          )
+        )
+      )
+    )
+  );
+}
+
+function renderSimulator(){
+  const placed=S.placed,rot=S.rot,sel=S.selProd,attempts=S.attempts,maxAtt=3;
+  const curHeight=placed.length*30;
+  const overHeight=curHeight>180;
+  const rules=[
+    {t:'Heavy items on bottom',ok:placed.length===0||checkHeavyBottom()},
+    {t:'Meat at the bottom',ok:placed.length===0||checkMeatBottom()},
+    {t:'No heavy on top of light',ok:placed.length===0||checkHeavyNotOnLight()},
+    {t:'Keep weight evenly distributed',ok:placed.length<3||checkEvenWeight()},
+    {t:'No overhanging boxes',ok:true},
+    {t:'Do not exceed max height',ok:!overHeight},
+    {t:'Wrap must secure all sides',ok:placed.length===0}
+  ];
+  function checkHeavyBottom(){const h=PRODS.filter(p=>p.heavy).map(p=>p.id);const firstThree=placed.slice(0,3).map(p=>p.productId);return h.every(id=>firstThree.includes(id))||placed.length<3;}
+  function checkMeatBottom(){const meatIds=['p1','p2'];const firstTwo=placed.slice(0,2).map(p=>p.productId);return meatIds.every(id=>firstTwo.includes(id))||placed.length<2;}
+  function checkHeavyNotOnLight(){for(let i=0;i<placed.length;i++){const p=PRODS.find(x=>x.id===placed[i].productId);if(p&&p.heavy){for(let j=i+1;j<placed.length;j++){const above=PRODS.find(x=>x.id===placed[j].productId);if(above&&!above.heavy)return false;}}}return true;}
+  function checkEvenWeight(){return true;}
+  function getProd(pid){return PRODS.find(p=>p.id===pid)||{name:'Unknown',color:'#94A3B8',wt:0};}
+
+  return h('div',{className:'fade-in',style:'margin:-24px;min-height:calc(100vh - 64px);display:flex;flex-direction:column;'},
+    h('div',{className:'bg-white border-b border-[#E2E8F0] px-6 py-3 flex items-center justify-between flex-shrink-0'},
+      h('div',{className:'flex items-center gap-4'},
+        h('button',{className:'flex items-center gap-2 text-sm text-[#0088D8] hover:underline',onclick:'goPage("sims")'},I.arrowLeft+' Back to Sysco Sims'),
+        h('h1',{className:'text-lg font-bold text-[#0A1628]'},'Picking & Pallet Building Simulator')
+      ),
+      h('div',{className:'flex items-center gap-6'},
+        h('div',{className:'flex items-center gap-2 text-sm'},h('span',{className:'text-[#6B7B8D]'},'Time Remaining'),h('span',{className:'font-bold text-[#0A1628]'},'19:24')),
+        h('div',{className:'flex items-center gap-2 text-sm'},h('span',{className:'text-[#6B7B8D]'},'Progress'),h('span',{className:'font-bold text-[#0A1628]'},'0%')),
+        h('button',{className:'btn btn-outline btn-sm',onclick:'goPage("sims")'},'Exit Simulation')
+      )
+    ),
+    h('div',{className:'flex-1 flex overflow-hidden'},
+      h('div',{className:'w-72 bg-[#0A1628] border-r border-[#1A2A3E] flex flex-col overflow-y-auto flex-shrink-0'},
+        h('div',{className:'p-4 border-b border-white/10'},
+          h('h3',{className:'text-white font-semibold text-sm mb-3'},'OBJECTIVES'),
+          h('div',{className:'space-y-2'},['Verify stock','Book in (update system)','Putaway stock','Check for damage','Update system'].map((o,i)=>h('div',{className:'flex items-center justify-between text-xs'},h('div',{className:'flex items-center gap-2'},I.check.replace('width="16"','width="14"').replace('height="16"','height="14"').replace('currentColor','rgba(255,255,255,0.4)')+h('span',{className:'text-white/70'},o)),h('span',{className:'text-white/40'},'(0/3)'))).join(''))
+        ),
+        h('div',{className:'p-4 border-b border-white/10'},
+          h('h3',{className:'text-white font-semibold text-sm mb-3'},'STACKING RULES'),
+          h('div',{className:'space-y-2'},
+            rules.map((r,i)=>h('div',{className:'flex items-center gap-2 text-xs'},
+              h('span',{className:'flex-shrink-0'},r.ok?I.check.replace('width="16"','width="14"').replace('height="16"','height="14"').replace('currentColor','#4BB92C'):i<4?I.alertTriangle.replace('width="32"','width="14"').replace('height="32"','height="14"').replace('currentColor','#F59E0B'):I.x.replace('width="20"','width="14"').replace('height="20"','height="14"').replace('currentColor','#EF4444'))+
+              h('span',{className:r.ok?'text-white/60':'text-white/40'},r.t)
+            )).join('')
+          )
+        ),
+        h('div',{className:'p-4'},
+          h('h3',{className:'text-white font-semibold text-sm mb-3'},'TOOLS & RESOURCES'),
+          h('div',{className:'grid grid-cols-2 gap-2'},
+            [{l:'PPE Check',i:'shield'},{l:'Damage Guide',i:'alertTriangle'},{l:'Location Map',i:'mapPin'},{l:'System (WMS)',i:'package'}].map(t=>h('button',{className:'flex flex-col items-center gap-1 p-2 bg-white/5 rounded-lg hover:bg-white/10 transition-colors'},I[t.i].replace('width="20"','width="20"').replace('height="20"','height="20"').replace('currentColor','rgba(255,255,255,0.6)')+h('span',{className:'text-white/60 text-[10px]'},t.l))).join('')
+          )
+        )
+      ),
+      h('div',{className:'flex-1 flex flex-col bg-[#F1F4F8]'},
+        h('div',{className:'bg-[#0A1628] px-6 py-3 flex items-center gap-4'},
+          h('div',{className:'w-8 h-8 rounded-full bg-[#0088D8] flex items-center justify-center'},I.info.replace('width="20"','width="16"').replace('height="20"','height="16"').replace('currentColor','#fff')),
+          h('div',{},h('p',{className:'text-white font-medium text-sm'},'Task 1 of 5: Verify Stock')+h('p',{className:'text-white/60 text-xs'},'Verify the delivered stock against the paperwork. Check quantities, product and quality.'))
+        ),
+        h('div',{className:'flex-1 relative overflow-hidden',style:'background:linear-gradient(180deg,#2D3E50 0%,#0A1628 100%)'},
+          h('div',{className:'absolute inset-0 flex items-center justify-center'},
+            h('div',{className:'relative',style:'transform:perspective(800px) rotateX(20deg);'},
+              h('div',{className:'pallet-base',style:`transform:rotateZ(${rot}deg);transition:transform 0.3s;`},
+                h('div',{className:'pallet-slats'},h('div',{className:'pallet-slat'},'')+h('div',{className:'pallet-slat'},'')+h('div',{className:'pallet-slat'},'')+h('div',{className:'pallet-slat'},'')+h('div',{className:'pallet-slat'},''))
+              ),
+              h('div',{className:'flex flex-col-reverse items-center',style:'margin-top:-8px;'},
+                placed.map((item,i)=>{
+                  const p=getProd(item.productId);
+                  return h('div',{className:'pallet-product',style:`background:${p.color};margin-bottom:2px;transform:rotateZ(${rot}deg);transition:transform 0.3s;`},p.name+' ('+p.wt+'kg)');
+                }).join('')
+              ),
+              h('div',{className:'absolute -right-20 top-0 bottom-0 flex items-center'},
+                h('div',{className:'h-full w-px bg-white/20 relative'},
+                  h('div',{className:'absolute top-0 -right-10 text-white/40 text-[10px]'},'MAX HEIGHT'),
+                  h('div',{className:'absolute top-4 -right-10 text-white/40 text-[10px]'},'180 cm'),
+                  h('div',{className:'absolute bottom-0 -right-10 text-white/40 text-[10px]'},'0 cm'),
+                  h('div',{className:'absolute left-0 w-2 h-px bg-[#0088D8]',style:`bottom:${Math.min((curHeight/180)*100,100)}%`},'')
+                )
+              )
+            )
+          ),
+          h('div',{className:'absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3'},
+            h('button',{className:'flex items-center gap-2 px-4 py-2 bg-[#0A1628]/90 text-white rounded-lg text-sm hover:bg-[#0A1628] transition-colors backdrop-blur-sm',onclick:'resetPallet()'},I.rotate+' Reset Pallet'),
+            h('button',{className:'flex items-center gap-2 px-4 py-2 bg-[#0A1628]/90 text-white rounded-lg text-sm hover:bg-[#0A1628] transition-colors backdrop-blur-sm',onclick:'undoLast()'},I.undo+' Undo'),
+            h('button',{className:'flex items-center gap-2 px-6 py-2 bg-[#0088D8] text-white rounded-lg text-sm font-medium hover:bg-[#0069A8] transition-colors disabled:opacity-50 backdrop-blur-sm',disabled:placed.length===0,onclick:'showSubmit()'},I.check+' Submit Pallet')
+          ),
+          h('div',{className:'absolute top-4 right-4 flex gap-1'},
+            ['3d','top','side'].map(m=>h('button',{className:'px-3 py-1 rounded text-xs font-medium capitalize '+(S.viewMode===m?'bg-[#0088D8] text-white':'bg-[#0A1628]/80 text-white/60 hover:bg-[#0A1628]'),onclick:'setView("'+m+'")'},m)).join('')
+          ),
+          h('div',{className:'absolute bottom-4 right-4 flex items-center gap-2'},
+            h('button',{className:'w-8 h-8 bg-[#0A1628]/90 text-white rounded-lg flex items-center justify-center hover:bg-[#0A1628]',onclick:'rotatePallet(-45)'},I.chevronLeft),
+            h('span',{className:'text-white/60 text-xs w-12 text-center'},rot+'°'),
+            h('button',{className:'w-8 h-8 bg-[#0A1628]/90 text-white rounded-lg flex items-center justify-center hover:bg-[#0A1628]',onclick:'rotatePallet(45)'},I.chevronRight)
+          )
+        ),
+        h('div',{className:'bg-white border-t border-[#E2E8F0] p-4'},
+          h('div',{className:'grid grid-cols-1 lg:grid-cols-4 gap-4'},
+            h('div',{},h('h4',{className:'text-xs font-bold text-[#0A1628] mb-2'},'LOCATION MAP'),h('div',{className:'grid grid-cols-5 gap-1 text-[10px] text-center text-[#6B7B8D]'},['A-09','A-10','A-11','A-12','A-14'].map(l=>h('div',{className:'py-1'},l))),h('div',{className:'grid grid-cols-5 gap-1 mt-1'},Array(20).fill(0).map((_,i)=>h('div',{className:'aspect-square bg-[#F1F4F8] rounded-sm'},''))),h('div',{className:'mt-2 flex items-center justify-center'},h('span',{className:'badge badge-success text-xs'},'A-12-04'))),
+            h('div',{className:'lg:col-span-2'},h('h4',{className:'text-xs font-bold text-[#0A1628] mb-2'},'HINTS'),h('p',{className:'text-xs text-[#6B7B8D] leading-relaxed'},'Always verify all stock against the delivery paperwork before booking in. Check quantities, product codes, batch dates and condition.')),
+            h('div',{},h('h4',{className:'text-xs font-bold text-[#0A1628] mb-2'},'SCORE & BADGES'),h('div',{className:'flex items-center gap-2'},I.award.replace('width="20"','width="32"').replace('height="20"','height="32"').replace('currentColor','#94A3B850')+h('p',{className:'text-xs text-[#6B7B8D]'},'Complete tasks accurately to earn badges and points.')),h('div',{className:'mt-3 flex items-center gap-2'},h('span',{className:'text-3xl font-bold text-[#0A1628]'},'0')+h('span',{className:'text-xs text-[#6B7B8D]'},'Total Points')))
+          )
+        )
+      ),
+      h('div',{className:'w-72 bg-white border-l border-[#E2E8F0] flex flex-col overflow-y-auto flex-shrink-0'},
+        h('div',{className:'p-4 border-b border-[#E2E8F0]'},
+          h('div',{className:'flex items-center justify-between mb-2'},
+            h('span',{className:'text-xs font-bold text-[#0A1628]'},'ATTEMPTS'),
+            h('span',{className:'text-lg font-bold text-[#0A1628]'},attempts+' / '+maxAtt)
+          )
+        ),
+        h('div',{className:'p-4 border-b border-[#E2E8F0] flex-1'},
+          h('h3',{className:'text-xs font-bold text-[#0088D8] mb-3'},'PRODUCTS TO USE ('+PRODS.length+')'),
+          h('div',{className:'space-y-2'},
+            PRODS.map((p,i)=>{
+              const placedCount=placed.filter(x=>x.productId===p.id).length;
+              const isSel=sel===p.id;
+              const done=placedCount>=p.cases;
+              return h('button',{className:'w-full flex items-center gap-3 p-2 rounded-lg text-left transition-all '+(isSel?'bg-[#E6F4FC] border border-[#0088D8]':done?'bg-[#F1F4F8] opacity-50':'bg-[#F1F4F8] hover:bg-[#E6F4FC]/50'),disabled:done,onclick:'selProd("'+p.id+'")'},
+                h('span',{className:'text-xs text-[#6B7B8D] w-4'},(i+1)),
+                h('div',{className:'w-8 h-8 rounded-md flex-shrink-0',style:'background:'+p.color},''),
+                h('div',{className:'flex-1 min-w-0'},h('p',{className:'text-xs font-medium text-[#0A1628] truncate'},p.name),h('p',{className:'text-[10px] text-[#6B7B8D]'},p.wt+'kg')),
+                h('span',{className:'text-xs text-[#6B7B8D]'},placedCount+'/'+p.cases)
+              );
+            }).join('')
+          ),
+          sel?h('div',{className:'mt-3 p-3 bg-[#E6F4FC] rounded-lg'},
+            h('p',{className:'text-xs text-[#0069A8] font-medium mb-2'},'Selected: '+getProd(sel).name),
+            h('button',{className:'btn btn-primary btn-sm w-full',onclick:'placeProd("'+sel+'")'},'Place on Pallet')
+          ):''
+        ),
+        h('div',{className:'p-4 border-b border-[#E2E8F0]'},
+          h('h3',{className:'text-xs font-bold text-[#0088D8] mb-3'},'PALLET PREVIEW'),
+          h('div',{className:'w-full aspect-square bg-[#F1F4F8] rounded-lg p-2'},
+            h('div',{className:'w-full h-full flex flex-col-reverse items-center justify-center gap-px'},
+              placed.length===0?h('div',{className:'text-center'},I.package.replace('width="20"','width="32"').replace('height="20"','height="32"').replace('currentColor','#CBD5E1')+h('p',{className:'text-[10px] text-[#6B7B8D] mt-1'},'Empty pallet')):
+              placed.map((item,i)=>h('div',{className:'w-full h-4 rounded-sm',style:'background:'+getProd(item.productId).color},'')).join('')
+            )
+          )
+        ),
+        h('div',{className:'p-4'},
+          h('div',{className:'flex items-start gap-2 bg-[#E6F4FC] p-3 rounded-lg'},
+            I.info.replace('width="20"','width="16"').replace('height="20"','height="16"').replace('currentColor','#0088D8')+
+            h('p',{className:'text-xs text-[#0069A8]'},'Remember: A stable pallet protects our products, our customers, and yourself.')
+          )
+        )
+      )
+    ),
+    S.showSubmit?h('div',{className:'fixed inset-0 bg-black/50 z-50 flex items-center justify-center',onclick:'if(event.target===this)hideSubmit()'},
+      h('div',{className:'bg-white rounded-2xl p-6 max-w-md w-full mx-4'},
+        h('h3',{className:'text-xl font-bold text-[#0A1628] mb-2'},'Submit Pallet?'),
+        h('p',{className:'text-[#6B7B8D] text-sm mb-4'},'You are about to submit your pallet for assessment. Once submitted, you will receive a shake test to verify stability.'),
+        h('div',{className:'flex gap-3'},
+          h('button',{className:'btn btn-outline flex-1',onclick:'hideSubmit()'},'Cancel'),
+          h('button',{className:'btn btn-primary flex-1',onclick:'doSubmit()'},'Submit')
+        )
+      )
+    ):'',
+    S.simResult?h('div',{className:'fixed inset-0 bg-black/50 z-50 flex items-center justify-center'},
+      h('div',{className:'bg-white rounded-2xl p-6 max-w-md w-full mx-4 text-center'},
+        S.simResult==='pass'
+          ?h('div',{},h('div',{className:'w-16 h-16 bg-[#E8F7E4] rounded-full flex items-center justify-center mx-auto mb-4'},I.check.replace('width="16"','width="32"').replace('height="16"','height="32"').replace('currentColor','#4BB92C'))+h('h3',{className:'text-xl font-bold text-[#0A1628] mb-2'},'Pallet Passed!')+h('p',{className:'text-[#6B7B8D] text-sm mb-4'},'Your pallet passed the shake test. Great work!'))
+          :h('div',{},h('div',{className:'w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4'},I.alertTriangle.replace('width="32"','width="32"').replace('height="32"','height="32"').replace('currentColor','#EF4444'))+h('h3',{className:'text-xl font-bold text-[#0A1628] mb-2'},'Pallet Failed')+h('p',{className:'text-[#6B7B8D] text-sm mb-4'},'Your pallet did not pass the shake test. '+(attempts<maxAtt?'You have '+(maxAtt-attempts+1)+' attempt(s) remaining.':'No more attempts remaining.'))),
+        h('div',{className:'flex gap-3'},
+          S.simResult==='fail'&&attempts<maxAtt?h('button',{className:'btn btn-outline flex-1',onclick:'resetPallet()'},'Try Again'):'',
+          h('button',{className:'btn btn-primary flex-1',onclick:'goPage("sims")'},'Back to Sims')
+        )
+      )
+    ):''
+  );
+}
+
+// ==================== EVENT BINDINGS ====================
+function bindLogin(){
+  const form=el('loginForm');
+  if(!form)return;
+  form.onsubmit=function(e){e.preventDefault();const email=el('email').value,pw=el('password').value,err=el('loginErr');if(email&&pw.length>=4){Store.login(email,pw);render();}else{err.textContent='Invalid credentials. Please try again.';err.classList.remove('hidden');}};
+  const toggle=el('togglePw');
+  if(toggle)toggle.onclick=function(){const pw=el('password');pw.type=pw.type==='password'?'text':'password';toggle.innerHTML=pw.type==='password'?I.eye:I.eyeOff;};
+}
+
+function bindNav(){
+  document.querySelectorAll('.nav-link').forEach(btn=>{btn.onclick=function(){goPage(this.dataset.page);};});
+  const logout=el('logoutBtn');
+  if(logout)logout.onclick=function(){Store.logout();render();};
+}
+
+// ==================== ACTIONS ====================
+function goPage(p){S.page=p;render();window.scrollTo(0,0);}
+function goMod(btn){S.mod=btn.dataset.mod;S.page='module-detail';render();window.scrollTo(0,0);}
+function launchSim(){S.page='simulator';render();window.scrollTo(0,0);}
+function selProd(id){S.selProd=S.selProd===id?null:id;render();}
+function placeProd(id){Store.placeProduct(id);render();}
+function undoLast(){Store.removeLastProduct();render();}
+function resetPallet(){Store.resetPallet();render();}
+function rotatePallet(deg){S.rot+=deg;render();}
+function setView(m){S.viewMode=m;render();}
+function showSubmit(){S.showSubmit=true;render();}
+function hideSubmit(){S.showSubmit=false;render();}
+function doSubmit(){
+  S.showSubmit=false;
+  let score=0;
+  const prods=S.placed.map(p=>PRODS.find(x=>x.id===p.productId)).filter(Boolean);
+  const heavyOnBottom=prods.every((p,i)=>!p.heavy||i<3);
+  const fragileOnTop=prods.every((p,i)=>!p.fragile||i>prods.length-4);
+  const underHeight=S.placed.length*30<=180;
+  if(heavyOnBottom)score+=25;
+  if(fragileOnTop)score+=25;
+  if(underHeight)score+=20;
+  score+=30;
+  S.simResult=score>=70?'pass':'fail';
+  S.simDone=true;
+  S.score=score;
+  if(S.simResult==='fail'&&S.attempts<3)S.attempts++;
+  render();
+}
+
+// ==================== INIT ====================
+document.addEventListener('DOMContentLoaded',function(){render();});
+</script>
+</body>
+</html>
